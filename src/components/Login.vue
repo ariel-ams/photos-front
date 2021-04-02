@@ -1,7 +1,6 @@
 <template>
-    <div class="register">
-    <h1 class="title">Sign Up</h1>
-    <form action class="form" @submit.prevent="register">
+  <div class="login">
+    <form action class="form" @submit.prevent="login">
       <label class="form-label" for="#email">Email:</label>
       <input
         v-model="email"
@@ -19,47 +18,43 @@
         id="password"
         placeholder="Password"
       >
-      <label class="form-label" for="#password-repeat">Repite la contraeña:</label>
-      <input
-        v-model="password2"
-        class="form-input"
-        type="password"
-        id="password-repeat"
-        placeholder="Password"
-      >
-      <input class="form-submit" type="submit" value="Sign Up">
+      <p v-if="error" class="error">Has introducido mal el email o la contraseña.</p>
+      <input class="form-submit" type="submit" value="Login">
     </form>
+
+    <p class="msg">¿No tienes cuenta?
+      <router-link to="/signin">Regístrate</router-link>
+    </p>
   </div>
 </template>
 
 <script>
-    import AuthService from '../services/auth';
-    export default {
-        mounted(){
-            console.log('Pagination component mounted');
-        },
-        data() {
-            return {
-                email: '',
-                password: '',
-                password2: ''
-            }
-        },
-        methods:{
-            register(){
-                AuthService.signin({
-                    email: this.email, 
-                    password: this.password, 
-                    password2: this.password2
-                }).then(response => {
-                    console.log(response);
-                    this.$router.push('/login');
-                }).catch(error => {
-                    console.error(error);
-                });
-            }
-        }
+import AuthService from '../services/auth';
+export default {
+  data: () => ({
+    email: "",
+    password: "",
+    error: false
+  }),
+  methods: {
+    login() {
+      AuthService.login({
+            email: this.email, 
+            password: this.password
+        }).then(response => {
+            console.log(response);
+            // const user = {
+            //     email: response.data.email,
+            //     token: response.data.token
+            // };
+            AuthService.setUserLogged(response.data.token);
+            this.$router.push('/');
+        }).catch(error => {
+            console.error(error);
+        });
     }
+  }
+};
 </script>
 
 <style scoped>
@@ -116,5 +111,9 @@ background: #0b9185;
 .error {
   margin: 1rem 0 0;
   color: #ff4a96;
+}
+.msg {
+  margin-top: 3rem;
+  text-align: center;
 }
 </style>
