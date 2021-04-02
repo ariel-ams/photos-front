@@ -4,11 +4,22 @@
     </div>
     <div v-if="!loading" class="centered" >
         <div class="centered-child">
+
+            <vue-easy-lightbox
+                escDisabled
+                moveDisabled
+                :visible="visible"
+                :imgs="photoUrls"
+                :index="index"
+                @hide="handleHide"
+            ></vue-easy-lightbox>
+
             <div class="gallery">
                 <div class="gallery-panel"
-                    v-for="photo in media"
-                    :key="photo.id">
-                <img :src="photo.thumbnail" :alt="photo.title">
+                    v-for="(photo, index) in media"
+                    :key="photo.id"
+                    @click="showLightbox(index)">
+                    <img :src="photo.thumbnail" :alt="photo.title">
                 </div>
             </div>
 
@@ -41,6 +52,7 @@
 import PhotosService from "../services/photos";
 import AuthService from '../services/auth';
 import VPagination from "@hennge/vue3-pagination";
+import VueEasyLightbox from 'vue-easy-lightbox'
 
 import "@hennge/vue3-pagination/dist/vue3-pagination.css";
 
@@ -65,6 +77,8 @@ export default {
             data: [],
             perPage: 10
         },
+        visible: false,
+        index: 0
     }),
     methods:{
         logout(){
@@ -92,6 +106,13 @@ export default {
                 catch(() => {
                     this.loading = false;
                 });
+        },
+        showLightbox(index) {
+            this.index = index;
+            this.visible = true;
+        },
+        handleHide() {
+            this.visible = false;
         }
     },
     computed:{
@@ -105,13 +126,24 @@ export default {
                 return {
                     url:image.url, 
                     thumbnail: image.thumbnailUrl,
+                    title: image.title,
+                    id: image.id
+                };
+            });
+        },
+        photoUrls(){
+            if(!this.currentImagesData) return [];
+            return this.pageData.data.map(image => {
+                return {
+                    src:image.url,
                     title: image.title
                 };
             });
         }
     },
     components:{
-        VPagination
+        VPagination,
+        VueEasyLightbox
     }
 }
 </script>
