@@ -18,14 +18,6 @@
         id="password"
         placeholder="Password"
       >
-      <label class="form-label" for="#password-repeat">Repite la contraeña:</label>
-      <input
-        v-model="password2"
-        class="form-input"
-        type="password"
-        id="password-repeat"
-        placeholder="Password"
-      >
       <input class="form-submit" type="submit" value="Sign Up">
     </form>
   </div>
@@ -49,7 +41,7 @@
                 AuthService.signin({
                     email: this.email, 
                     password: this.password, 
-                    password2: this.password2
+                    password2: this.password
                 }).then(response => {
                     console.log(response);
                     this.$router.push('/login');
