@@ -1,6 +1,6 @@
 <template>
     <div>
-        <a @click="logout">Cerrar sesión</a>
+        <a @click="logout">Logout</a>
     </div>
     <div v-if="!loading" class="centered" >
         <div class="centered-child">
