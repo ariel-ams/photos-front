@@ -1,6 +1,5 @@
 <template>
     <div class="register">
-    <h1 class="title">Sign Up</h1>
     <form action class="form" @submit.prevent="register">
       <label class="form-label" for="#email">Email:</label>
       <input
@@ -102,7 +101,7 @@ outline: 0;
 border-color: #1ab188;
 }
 .form-submit {
-  background: #1ab188;
+  background: #1a8eb1;
   border: none;
   color: white;
   margin-top: 3rem;
@@ -111,7 +110,7 @@ border-color: #1ab188;
   transition: background 0.2s;
 }
 .form-submit:hover {
-background: #0b9185;
+background: #0b6091;
 }
 .error {
   margin: 1rem 0 0;

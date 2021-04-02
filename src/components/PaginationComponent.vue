@@ -1,6 +1,6 @@
 <template>
     <div>
-        <a @click="logout">Logout</a>
+        <a @click="logout" class="logout">Logout</a>
     </div>
     <div v-if="!loading" class="centered" >
         <div class="centered-child">
@@ -96,7 +96,6 @@ export default {
             PhotosService.get(this.page)
                 .then(response => {
                     let data =  response.data.data;
-                    console.log(this.pageData);
 
                     this.pageData.pages = data.totalPages;
                     this.pageData.currentPage = data.currentPage;
@@ -174,9 +173,17 @@ export default {
   }
 
   .loading-img{
-      margin: auto;
-      padding-top: 40%;
-      filter: invert(0%) sepia(91%) saturate(0%) hue-rotate(154deg) brightness(95%) contrast(100%);
-      width: 500%;
+    margin: auto;
+    padding-top: 40%;
+    filter: invert(0%) sepia(91%) saturate(0%) hue-rotate(154deg) brightness(95%) contrast(100%);
+    width: 500%;
+  }
+  .logout{
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    margin-right: 10px;
+    margin-top: 10px;
+    cursor: pointer;
   }
 </style>
