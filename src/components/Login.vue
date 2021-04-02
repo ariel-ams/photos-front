@@ -18,7 +18,7 @@
         id="password"
         placeholder="Password"
       >
-      <p v-if="error" class="error">Has introducido mal el email o la contraseña.</p>
+      <p v-if="error" class="error">{{errorMessage}}</p>
       <input class="form-submit" type="submit" value="Login">
     </form>
 
