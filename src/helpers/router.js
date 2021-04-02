@@ -11,13 +11,12 @@ const router = createRouter({
         { path: '/', component: PaginationComponent},
         { path: '/login', component: Login},
         { path: '/signin', component: SignIn},
-        { path: '/logout', component: SignIn, redirect: '/login'},
         //{ path: '*', redirect: '/'}
     ]
 });
 
 router.beforeEach((to, from, next) => {
-    const publicPages = ['/login', '/register'];
+    const publicPages = ['/login', '/signin'];
     const authRequired = !publicPages.includes(to.path);
     const loggedIn = Cookies.get('auth');
   
