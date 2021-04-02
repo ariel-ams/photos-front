@@ -22,8 +22,8 @@
       <input class="form-submit" type="submit" value="Login">
     </form>
 
-    <p class="msg">¿No tienes cuenta?
-      <router-link to="/signin">Regístrate</router-link>
+    <p class="msg">Don't have an account?
+      <router-link to="/signin">Sign in</router-link>
     </p>
   </div>
 </template>
