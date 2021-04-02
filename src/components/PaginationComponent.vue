@@ -2,28 +2,69 @@
     <div>
         <a @click="logout">Cerrar sesión</a>
     </div>
-    <div>
-        I'm an example component.
+    <div v-if="!loading" class="centered" >
+        <div class="centered-child">
+            <div class="gallery">
+                <div class="gallery-panel"
+                    v-for="photo in media"
+                    :key="photo.id">
+                <img :src="photo.thumbnail" :alt="photo.title">
+                </div>
+            </div>
+
+
+            <div class="centered">
+                <div class="centered-child">
+                    <v-pagination
+                        v-model="page"
+                        :pages="pageData.pages"
+                        :range-size="pageData.rangeSize"
+                        active-color="#DCEDFF"
+                        @update:modelValue="updateHandler"
+                    />
+                </div>
+            </div>
+        </div>
     </div>
+
+    <div v-else class="centered">
+        <div class="centered-child">
+            <div class="loading">
+                <img :src="tailSpin" alt="loading" class="loading-img">
+            </div>
+        </div>
+    </div>
+
 </template>
 
 <script>
 import PhotosService from "../services/photos";
 import AuthService from '../services/auth';
+import VPagination from "@hennge/vue3-pagination";
+
+import "@hennge/vue3-pagination/dist/vue3-pagination.css";
+
+import tailSpin from "@/assets/svg/tail-spin.svg";
+
 export default {
-    // created(){
-    //     if(!AuthService.authenticated()){
-    //         this.$router.push('/login');
-    //     }
-    // },
-    mounted(){        
-        PhotosService.get(this.page)
-            .then(response => {
-                console.log(response);
-            })
+    setup() {
+      return {
+        tailSpin
+      };
+    },
+    mounted(){            
+        this.loadPhotosCurrentPage();
     },
     data: () => ({
+        loading: false,
         page: 1,
+        pageData: {
+            pages: 0,
+            rangeSize: 2,
+            currentPage: 0,
+            data: [],
+            perPage: 10
+        },
     }),
     methods:{
         logout(){
@@ -32,7 +73,78 @@ export default {
                     AuthService.removeCookie();
                     this.$router.push('/login');
                 });
+        },
+        updateHandler(){
+            this.loadPhotosCurrentPage();
+        },
+        loadPhotosCurrentPage(){
+            this.loading = true; 
+            PhotosService.get(this.page)
+                .then(response => {
+                    let data =  response.data.data;
+                    console.log(this.pageData);
+
+                    this.pageData.pages = data.totalPages;
+                    this.pageData.currentPage = data.currentPage;
+                    this.pageData.data = data.data;
+                    this.loading = false;
+                }).
+                catch(() => {
+                    this.loading = false;
+                });
         }
-    }    
+    },
+    computed:{
+        currentImagesData(){
+            if(!this.pageData) return null;
+            return this.pageData.data;
+        },
+        media(){
+            if(!this.currentImagesData) return [];
+            return this.pageData.data.map(image => {
+                return {
+                    url:image.url, 
+                    thumbnail: image.thumbnailUrl,
+                    title: image.title
+                };
+            });
+        }
+    },
+    components:{
+        VPagination
+    }
 }
 </script>
+
+<style>
+  .gallery {
+    display: grid;
+    grid-template-columns: repeat(2, 150px 150px);
+    grid-gap: 1rem;
+    max-width: 90rem;
+    margin: 2rem auto;
+    margin-top: .5rem;
+    padding: 0 2rem;
+  }
+  .gallery-panel img {
+    height: 150px;
+    /* object-fit: cover; */
+    border-radius: 0.75rem;
+  }
+  .centered{
+      text-align: center;
+  }
+  .centered-child{
+    display: inline-block;
+  }
+  .loading{
+    height: 150px;
+  }
+
+  .loading-img{
+      margin: auto;
+      padding-top: 40%;
+      filter: invert(0%) sepia(91%) saturate(0%) hue-rotate(154deg) brightness(95%) contrast(100%);
+      width: 500%;
+  }
+</style>
