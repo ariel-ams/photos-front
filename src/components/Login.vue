@@ -34,7 +34,8 @@ export default {
   data: () => ({
     email: "",
     password: "",
-    error: false
+    error: false,
+    errorMessage: ""
   }),
   methods: {
     login() {
@@ -42,13 +43,13 @@ export default {
             email: this.email, 
             password: this.password
         }).then(response => {
-            console.log(response);
-            // const user = {
-            //     email: response.data.email,
-            //     token: response.data.token
-            // };
-            AuthService.setUserLogged(response.data.token);
-            this.$router.push('/');
+            if(response.data.isAuth){
+                AuthService.setUserLogged(response.data.token);
+                this.$router.push('/');
+            }else{
+                this.error = true;
+                this.errorMessage = response.data.message;
+            }
         }).catch(error => {
             console.error(error);
         });
