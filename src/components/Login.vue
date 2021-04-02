@@ -110,7 +110,7 @@ border-color: #1ab188;
 background: #0b9185;
 }
 .error {
-  margin: 1rem 0 0;
+  margin: .5rem 0 0;
   color: #ff4a96;
 }
 .msg {

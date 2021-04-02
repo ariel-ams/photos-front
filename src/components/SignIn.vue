@@ -18,6 +18,7 @@
         id="password"
         placeholder="Password"
       >
+      <p v-if="error" class="error">{{errorMessage}}</p>
       <input class="form-submit" type="submit" value="Sign Up">
     </form>
   </div>
@@ -33,7 +34,9 @@
             return {
                 email: '',
                 password: '',
-                password2: ''
+                password2: '',
+                error: false,
+                errorMessage: ''
             }
         },
         methods:{
@@ -46,7 +49,8 @@
                     console.log(response);
                     this.$router.push('/login');
                 }).catch(error => {
-                    console.error(error);
+                    this.error = true;
+                    this.errorMessage = error.response.data.message;
                 });
             }
         }
@@ -105,7 +109,7 @@ border-color: #1ab188;
 background: #0b6091;
 }
 .error {
-  margin: 1rem 0 0;
+  margin: .5rem 0 0;
   color: #ff4a96;
 }
 </style>
