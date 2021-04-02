@@ -27,9 +27,6 @@
 <script>
     import AuthService from '../services/auth';
     export default {
-        mounted(){
-            console.log('Pagination component mounted');
-        },
         data() {
             return {
                 email: '',
@@ -45,8 +42,7 @@
                     email: this.email, 
                     password: this.password, 
                     password2: this.password
-                }).then(response => {
-                    console.log(response);
+                }).then(() => {
                     this.$router.push('/login');
                 }).catch(error => {
                     this.error = true;
